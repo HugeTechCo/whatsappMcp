@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WhatsApp MCP Test</title>
+</head>
+<body>
+  <h1>WhatsApp MCP Connection Test</h1>
+  <button id="test-btn">Test Connection</button>
+  <pre id="result"></pre>
+
+  <script>
+    document.getElementById('test-btn').addEventListener('click', async () => {
+      const resultEl = document.getElementById('result');
+      
+      try {
+        resultEl.textContent = 'Connecting to WhatsApp MCP server...';
+        
+        const response = await fetch('http://localhost:3001/mcp/tools/list_chats', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            limit: 5,
+            include_last_message: true
+          }),
+        });
+        
+        const data = await response.json();
+        resultEl.textContent = 'Connection successful!\n\n' + JSON.stringify(data, null, 2);
+      } catch (error) {
+        resultEl.textContent = 'Connection failed!\n\n' + error.message;
+        console.error('Error:', error);
+      }
+    });
+  </script>
+</body>
+</html> 
